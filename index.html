@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ResistorLab | Calculadora de resistencias</title>
+<style>
+:root{--bg:#0b1020;--panel:#131b2e;--panel2:#18233a;--line:#293754;--text:#edf3ff;--muted:#98a9c7;--cyan:#65e4d1;--blue:#7c9cff;--gold:#ffc66d;--green:#8be5a5}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 15% 0%,#1b2d4b 0,transparent 40%),var(--bg);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif;min-height:100vh}
+.wrap{max-width:1180px;margin:auto;padding:34px 22px 50px}.top{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:30px}.brand{display:flex;align-items:center;gap:12px}.logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--cyan),var(--blue));display:grid;place-items:center;color:#07111e;font-size:24px;font-weight:900;box-shadow:0 8px 30px #65e4d133}.brand h1{font-size:21px;margin:0;letter-spacing:.2px}.brand p{margin:4px 0 0;color:var(--muted);font-size:12px}.pill{border:1px solid #314362;background:#17243a;color:#c5d3ee;padding:9px 13px;border-radius:99px;font-size:12px}
+.hero{margin:10px 0 25px}.eyebrow{color:var(--cyan);font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase}.hero h2{font-size:clamp(28px,4vw,43px);line-height:1.08;margin:10px 0 12px;max-width:720px;letter-spacing:-1.3px}.hero p{color:var(--muted);max-width:670px;line-height:1.65;margin:0}
+.layout{display:grid;grid-template-columns:360px 1fr;gap:20px;align-items:start}.panel{background:linear-gradient(180deg,#151f34,#11192a);border:1px solid var(--line);border-radius:22px;padding:23px;box-shadow:0 18px 55px #00000020}.panel-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.panel-title h3{margin:0;font-size:16px}.step{font-size:11px;color:var(--muted);background:#202d46;padding:6px 9px;border-radius:8px}
+label{display:block;font-size:12px;color:#bdcbe2;margin-bottom:9px;font-weight:650}.inputbox{position:relative;margin-bottom:20px}.inputbox input{width:100%;background:#0b1221;border:1px solid #344461;border-radius:12px;color:white;padding:15px 58px 15px 14px;font-size:20px;outline:none;transition:.2s}.inputbox input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px #65e4d118}.unit{position:absolute;right:14px;top:16px;color:var(--muted);font-size:13px}
+.quick{display:flex;gap:7px;flex-wrap:wrap;margin-top:-9px;margin-bottom:20px}.quick button{background:#1a2740;border:1px solid #2d3e5d;color:#bdcbe2;border-radius:8px;padding:7px 10px;font-size:11px;cursor:pointer}.quick button:hover{border-color:var(--cyan);color:var(--cyan)}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:20px}.option{border:1px solid #344461;background:#0d1525;border-radius:12px;padding:12px;cursor:pointer;display:flex;gap:10px;align-items:center}.option input{accent-color:var(--cyan)}.option strong{display:block;font-size:14px}.option small{color:var(--muted);font-size:10px;display:block;margin-top:3px}
+.primary{width:100%;border:0;border-radius:12px;padding:15px 16px;background:linear-gradient(100deg,var(--cyan),#9bedd8);color:#081722;font-size:14px;font-weight:850;cursor:pointer;box-shadow:0 9px 24px #65e4d125}.primary:hover{filter:brightness(1.06);transform:translateY(-1px)}.note{font-size:11px;color:var(--muted);line-height:1.55;margin:15px 0 0}.right{min-width:0}.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:15px}.stat{background:#121b2e;border:1px solid var(--line);border-radius:16px;padding:16px}.stat span{display:block;color:var(--muted);font-size:11px;margin-bottom:8px}.stat strong{font-size:21px;letter-spacing:-.5px}.stat em{font-style:normal;color:var(--cyan);font-size:11px;display:block;margin-top:5px}
+.results-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:22px 2px 13px}.results-head h3{font-size:16px;margin:0}.count{font-size:11px;color:var(--muted)}.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.result{background:linear-gradient(140deg,#17233a,#121b2d);border:1px solid #2b3a56;border-radius:16px;padding:16px;position:relative;overflow:hidden}.result.best{border-color:#4bbcae;box-shadow:inset 0 0 0 1px #65e4d11a}.result.best:after{content:'MEJOR COINCIDENCIA';position:absolute;right:-29px;top:13px;transform:rotate(35deg);font-size:8px;letter-spacing:.7px;background:var(--cyan);color:#092026;padding:5px 30px;font-weight:900}.kind{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;font-weight:800}.value{font-size:26px;font-weight:850;letter-spacing:-.7px;margin:9px 0 4px}.value small{font-size:13px;color:var(--muted);font-weight:600}.error{font-size:12px;color:var(--gold)}.bar{height:5px;background:#283650;border-radius:10px;overflow:hidden;margin:13px 0 14px}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--blue));border-radius:10px}.chips{display:flex;gap:6px;flex-wrap:wrap}.chip{background:#202d45;border:1px solid #30415f;border-radius:7px;padding:6px 8px;font-size:11px;color:#d5e0f4}.chip b{color:var(--cyan);font-weight:700}.circuit{margin-top:14px;background:#0d1525;border:1px solid #263550;border-radius:10px;padding:10px;display:flex;align-items:center;justify-content:center;min-height:50px;gap:5px;color:#9fb0cc;font-size:10px}.wire{height:2px;background:#526987;flex:1;min-width:8px}.resistor{border:1px solid #e5bc75;background:#4b3c2b;color:#ffe0a5;padding:6px 8px;border-radius:4px;font-weight:800;white-space:nowrap}.empty{border:1px dashed #344461;border-radius:18px;padding:40px 20px;text-align:center;color:var(--muted);grid-column:1/-1}.empty .symbol{font-size:32px;margin-bottom:12px}.empty strong{display:block;color:#dce6f8;margin-bottom:7px}.footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#7184a4;font-size:10px;margin-top:28px;border-top:1px solid #202d43;padding-top:18px}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.summary{grid-template-columns:repeat(3,1fr)}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:540px){.wrap{padding:22px 14px}.top{align-items:flex-start}.pill{display:none}.panel{padding:18px}.summary{grid-template-columns:1fr}.stat{padding:13px}.stat strong{font-size:19px}.cards{grid-template-columns:1fr}.hero h2{font-size:31px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><div class="logo">Ω</div><div><h1>ResistorLab</h1><p>LABORATORIO DE ELECTRÓNICA · ESIME</p></div></div>
+    <div class="pill">● Calculadora de valores comerciales</div>
+  </header>
+  <section class="hero">
+    <div class="eyebrow">Herramienta de diseño electrónico</div>
+    <h2>Encuentra la combinación de resistencias ideal.</h2>
+    <p>Ingresa el valor objetivo y la tolerancia. Calcularemos las combinaciones comerciales más cercanas usando una, dos o tres resistencias en serie y paralelo.</p>
+  </section>
+  <main class="layout">
+    <section class="panel">
+      <div class="panel-title"><h3>Parámetros de búsqueda</h3><span class="step">PASO 01</span></div>
+      <label for="target">Resistencia deseada</label>
+      <div class="inputbox"><input id="target" type="number" min="0.01" step="any" value="4700" placeholder="Ej. 4700"><span class="unit">Ω ohms</span></div>
+      <div class="quick"><button data-value="220">220 Ω</button><button data-value="1000">1 kΩ</button><button data-value="4700">4.7 kΩ</button><button data-value="10000">10 kΩ</button></div>
+      <label>Tolerancia comercial</label>
+      <div class="options">
+        <label class="option"><input type="radio" name="tol" value="10" checked><span><strong>±10%</strong><small>Serie E12</small></span></label>
+        <label class="option"><input type="radio" name="tol" value="1"><span><strong>±1%</strong><small>Serie E96</small></span></label>
+      </div>
+      <label>Combinaciones</label>
+      <div class="options">
+        <label class="option"><input type="checkbox" id="one" checked><span><strong>1 resistencia</strong><small>Valor individual</small></span></label>
+        <label class="option"><input type="checkbox" id="two" checked><span><strong>2 resistencias</strong><small>Serie / paralelo</small></span></label>
+        <label class="option"><input type="checkbox" id="three" checked><span><strong>3 resistencias</strong><small>Todas las topologías</small></span></label>
+      </div>
+      <button class="primary" id="calculate">⌁　Calcular combinaciones</button>
+      <p class="note">Se consideran resistencias del mismo catálogo comercial. Las combinaciones se ordenan por menor error porcentual y se muestran las mejores coincidencias.</p>
+    </section>
+    <section class="right">
+      <div class="summary">
+        <div class="stat"><span>VALOR OBJETIVO</span><strong id="sTarget">4.700 kΩ</strong><em>Resistencia requerida</em></div>
+        <div class="stat"><span>MEJOR RESULTADO</span><strong id="sBest">—</strong><em id="sError">Esperando cálculo</em></div>
+        <div class="stat"><span>COMBINACIONES</span><strong id="sCount">—</strong><em>Coincidencias evaluadas</em></div>
+      </div>
+      <div class="results-head"><h3>Mejores coincidencias</h3><span class="count" id="status">Ingresa un valor para comenzar</span></div>
+      <div class="cards" id="results"><div class="empty"><div class="symbol">⌁</div><strong>Tu análisis aparecerá aquí</strong>Define la resistencia objetivo y presiona calcular.</div></div>
+    </section>
+  </main>
+  <footer class="footer"><span>ResistorLab · Calculadora de redes resistivas</span><span>Valores nominales · Serie E12 / E96 · Ω</span></footer>
+</div>
+<script>
+const E12=[10,12,15,18,22,27,33,39,47,56,68,82];
+const E96=[100,102,105,107,110,113,115,118,121,124,127,130,133,137,140,143,147,150,154,158,162,165,169,174,178,182,187,191,196,200,205,210,215,221,226,232,237,243,249,255,261,267,274,280,287,294,301,309,316,324,332,340,348,357,365,374,383,392,402,412,422,432,442,453,464,475,487,499,511,523,536,549,562,576,590,604,619,634,649,665,681,698,715,732,750,768,787,806,825,845,866,887,909,931,953,976];
+function catalog(tol){
+ const bases=tol===10?E12:E96, vals=[];
+ for(let decade=-1;decade<=7;decade++) for(const b of bases) vals.push(Number((b/10*Math.pow(10,decade)).toPrecision(6)));
+ return [...new Set(vals)].filter(v=>v>=0.1&&v<=1e7).sort((a,b)=>a-b);
+}
+function fmt(v){
+ if(!Number.isFinite(v))return '—';
+ if(v>=1e6)return (v/1e6).toPrecision(4).replace(/\.?0+$/,'')+' MΩ';
+ if(v>=1e3)return (v/1e3).toPrecision(4).replace(/\.?0+$/,'')+' kΩ';
+ if(v<1)return (v*1000).toPrecision(4).replace(/\.?0+$/,'')+' mΩ';
+ return Number(v.toPrecision(5)).toLocaleString('es-MX',{maximumFractionDigits:3})+' Ω';
+}
+function raw(v){return Number(v.toPrecision(7)).toLocaleString('es-MX',{maximumFractionDigits:5})+' Ω'}
+function calc(){
+ const target=Number(document.getElementById('target').value);
+ const tol=Number(document.querySelector('input[name="tol"]:checked').value);
+ const enabled=[document.getElementById('one').checked,document.getElementById('two').checked,document.getElementById('three').checked];
+ if(!(target>0)||!Number.isFinite(target)){document.getElementById('results').innerHTML='<div class="empty"><strong>Valor no válido</strong>Escribe una resistencia mayor que cero.</div>';return}
+ const vals=catalog(tol), out=[], seen=new Set();
+ function add(value,parts,topology,kind){
+   if(!Number.isFinite(value)||value<=0)return;
+   const key=topology+'|'+parts.map(x=>x.toPrecision(7)).sort().join('|');
+   if(seen.has(key))return;seen.add(key);
+   const err=Math.abs(value-target)/target*100;
+   out.push({value,parts,topology,kind,err});
+ }
+ if(enabled[0]) for(const a of vals)add(a,[a],'Individual','1 resistencia');
+ if(enabled[1]) for(let i=0;i<vals.length;i++)for(let j=i;j<vals.length;j++){
+   const a=vals[i],b=vals[j];add(a+b,[a,b],'Serie','2 resistencias');
+   add(a*b/(a+b),[a,b],'Paralelo','2 resistencias');
+ }
+ if(enabled[2]){
+   // Búsqueda optimizada: para cada par, calcula qué tercer valor acercaría
+   // cada topología al objetivo y evalúa los valores comerciales vecinos.
+   // Evita recorrer cientos de millones de ternas en la serie E96.
+   function nearby(x){
+     if(!(x>0)||!Number.isFinite(x))return [];
+     let lo=0,hi=vals.length;
+     while(lo<hi){const mid=(lo+hi)>>1;if(vals[mid]<x)lo=mid+1;else hi=mid;}
+     const arr=[];
+     for(let p=Math.max(0,lo-2);p<Math.min(vals.length,lo+3);p++)arr.push(vals[p]);
+     return arr;
+   }
+   for(let i=0;i<vals.length;i++)for(let j=i;j<vals.length;j++){
+     const a=vals[i],b=vals[j];
+     // a + b + c = objetivo
+     for(const c of nearby(target-a-b))add(a+b+c,[a,b,c],'Serie','3 resistencias');
+     // a || b || c: despeje de c a partir del objetivo
+     const inv=1/target-1/a-1/b;
+     if(inv>0)for(const c of nearby(1/inv))add(1/(1/a+1/b+1/c),[a,b,c],'Paralelo','3 resistencias');
+     // a + (b || c) = objetivo; se despeja c
+     for(const [s,p] of [[a,b],[b,a]]){
+       const q=target-s;
+       if(q>0&&p>q)for(const c of nearby(q*p/(p-q)))add(s+p*c/(p+c),[s,p,c],'Mixta: serie + paralelo','3 resistencias');
+       // a || (b + c) = objetivo; se despeja c
+       if(target>0&&target<a){
+         const q=target*a/(a-target);
+         for(const c of nearby(q-b))add(1/(1/a+1/(b+c)),[a,b,c],'Mixta: paralelo + serie','3 resistencias');
+       }
+     }
+   }
+ }
+ out.sort((a,b)=>a.err-b.err);
+ const top=out.slice(0,12);
+ document.getElementById('sTarget').textContent=fmt(target);
+ document.getElementById('sBest').textContent=top.length?fmt(top[0].value):'—';
+ document.getElementById('sError').textContent=top.length?top[0].err.toFixed(4)+'% de error':'Sin combinaciones';
+ document.getElementById('sCount').textContent=out.length.toLocaleString('es-MX');
+ document.getElementById('status').textContent=top.length?'Mostrando '+top.length+' de las mejores':'No hay resultados';
+ const results=document.getElementById('results');
+ if(!top.length){results.innerHTML='<div class="empty"><strong>Selecciona al menos un tipo</strong>Activa una, dos o tres resistencias para calcular.</div>';return}
+ results.innerHTML=top.map((r,i)=>{
+   const pct=Math.max(2,Math.min(100,100-r.err*5));
+   const chips=r.parts.map((p,n)=>'<span class="chip">R'+(n+1)+' <b>'+fmt(p)+'</b></span>').join('');
+   let diagram='';
+   if(r.parts.length===1)diagram='<span class="wire"></span><span class="resistor">'+fmt(r.parts[0])+'</span><span class="wire"></span>';
+   else if(r.topology==='Serie')diagram='<span class="wire"></span>'+r.parts.map(p=>'<span class="resistor">'+fmt(p)+'</span><span class="wire"></span>').join('');
+   else if(r.topology==='Paralelo')diagram='<span>R1 ∥ R2'+(r.parts.length===3?' ∥ R3':'')+'</span>';
+   else diagram='<span>'+r.topology+'</span>';
+   return '<article class="result '+(i===0?'best':'')+'"><div class="kind">'+r.kind+' · '+r.topology+'</div><div class="value">'+fmt(r.value)+'</div><div class="error">Error relativo: '+r.err.toFixed(5)+'%</div><div class="bar"><i style="width:'+pct+'%"></i></div><div class="chips">'+chips+'</div><div class="circuit">'+diagram+'</div></article>';
+ }).join('');
+}
+document.getElementById('calculate').addEventListener('click',calc);
+document.querySelectorAll('.quick button').forEach(b=>b.addEventListener('click',()=>{document.getElementById('target').value=b.dataset.value;calc()}));
+document.getElementById('target').addEventListener('keydown',e=>{if(e.key==='Enter')calc()});
+calc();
+</script>
+</body>
+</html>
